@@ -1,4 +1,18 @@
 services:
+  postgres:
+    image: postgres
+    container_name: animeshki-postgres
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+    expose:
+      - "5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - backend-network
+
   minio-service:
     build:
       context: ./src/minio-service/
@@ -46,3 +60,7 @@ volumes:
   minio-data:
     driver: local
     name: minio-data
+  postgres-data:
+    driver: local
+    name: postgres-data
+

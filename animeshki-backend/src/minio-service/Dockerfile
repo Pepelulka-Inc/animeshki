@@ -5,23 +5,24 @@ WORKDIR /root/
 # Для режима начальной инициализации: (смотреть README.md)
 # Установка mc (minio client)
 RUN apt-get update
-RUN apt install -y curl
+RUN apt install -y curl dos2unix
 RUN curl https://dl.min.io/client/mc/release/linux-amd64/mc -o ./mc
 RUN chmod +x ./mc
 RUN mv ./mc /usr/bin
-
-COPY ./docker-entrypoint.sh ./docker-entrypoint.sh
 
 COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./app ./app
-RUN mv ./docker-entrypoint.sh ./app
+
+COPY ./docker-entrypoint.sh ./app/docker-entrypoint.sh
 
 EXPOSE 8000
 
 WORKDIR /root/app
+
+RUN dos2unix docker-entrypoint.sh
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 CMD ["python", "main.py"]

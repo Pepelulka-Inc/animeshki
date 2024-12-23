@@ -42,8 +42,7 @@ class Favorites(Base):
 class Anime(Base):
     __tablename__ = "anime"
 
-    id = Column(Integer, primary_key=True, index=True)
-    anime_id = Column(Uuid, unique=True)
+    anime_id = Column(Uuid, unique=True, primary_key=True)
     title = Column(String(256), unique=True, index=True)
     description = Column(String(512), index=True)
     picture_minio_path = Column(String(256), unique=True, index=True)
@@ -57,8 +56,8 @@ class Anime_stat(Base):
         ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),
         primary_key=True,
     )
-    users_started_num = Column(Integer, index=True)
-    users_completed_num = Column(Integer, index=True)
+    users_started_num = Column(Integer)
+    users_completed_num = Column(Integer)
 
 
 class Anime_episode(Base):
@@ -80,7 +79,7 @@ class Comments(Base):
     anime_id = Column(
         Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE")
     )
-    comment_id = Column(Integer, unique=True, index=True, primary_key=True)
+    comment_id = Column(Integer, unique=True, primary_key=True)
     username = Column(
         String(32), ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE")
     )

@@ -23,7 +23,7 @@ SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 15
-REFRESH_TOKEN_EXPIRE_MINUTES = 10
+REFRESH_TOKEN_EXPIRE_DAYS = 30
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -42,7 +42,7 @@ def create_access_token(
 
 def create_refresh_token(data: Dict[str, datetime]) -> str:
     to_encode = data.copy()
-    expire = datetime.now() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now() + timedelta(days=REFRESH_TOKEN_EXPIRE_DAYS)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
@@ -50,12 +50,10 @@ def create_refresh_token(data: Dict[str, datetime]) -> str:
 def check_credentials_admin(func: Callable) -> Callable:
     """
     Декоратор проверяющий привелегию, вешается на все админские ручки
-    :return:
     """
-
     @wraps(func)
     async def wrapper(request: web.Request) -> web.Response:
-        token = request.headers.get("Authorization")
+        token = request.cookies.get("access_token")
         if not token:
             return web.json_response({"msg": "Token is missing"}, status=401)
 

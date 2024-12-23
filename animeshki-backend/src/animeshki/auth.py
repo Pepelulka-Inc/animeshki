@@ -193,9 +193,9 @@ async def refresh_access_token(request: web.Request) -> web.Response:
 
 
 app = web.Application()
-app.router.add_post("/register", register)
-app.router.add_post("/login", login)
-app.router.add_post("/refresh", refresh_access_token)
+app.router.add_post("/api/v1/register", register)
+app.router.add_post("/api/v1/login", login)
+app.router.add_post("/api/v1/refresh", refresh_access_token)
 
 if __name__ == "__main__":
     asyncio.run(init_db_and_tables())

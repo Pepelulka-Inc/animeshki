@@ -75,6 +75,7 @@ def check_credentials_admin(func: Callable) -> Callable:
 
     return wrapper
 
+
 async def register(request: web.Request) -> web.Response:
     """
     /POST register
@@ -148,7 +149,6 @@ async def login(request: web.Request) -> web.Response:
         )
         refresh_token = create_refresh_token(data={"sub": username})
 
-
         response = web.json_response({"msg": "User login successfully"})
         response.set_cookie("access_token", access_token, httponly=True)
         response.set_cookie("refresh_token", refresh_token, httponly=True)
@@ -192,7 +192,6 @@ async def refresh_access_token(request: web.Request) -> web.Response:
         return web.json_response({"msg": "Refresh token has expired"}, status=401)
     except jwt.InvalidTokenError:
         return web.json_response({"msg": "Invalid refresh token"}, status=401)
-
 
 
 app = web.Application()

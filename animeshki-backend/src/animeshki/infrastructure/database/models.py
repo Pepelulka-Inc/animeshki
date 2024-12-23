@@ -28,10 +28,14 @@ class Favorites(Base):
     __tablename__ = "favorites"
 
     username = Column(
-        String(32), ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE"), primary_key=True
+        String(32),
+        ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
     anime_id = Column(
-        Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"), primary_key=True
+        Uuid,
+        ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
 
 
@@ -49,7 +53,9 @@ class Anime_stat(Base):
     __tablename__ = "anime_stat"
 
     anime_id = Column(
-        Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"), primary_key=True
+        Uuid,
+        ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
     users_started_num = Column(Integer, index=True)
     users_completed_num = Column(Integer, index=True)
@@ -59,7 +65,9 @@ class Anime_episode(Base):
     __tablename__ = "anime_episode"
 
     anime_id = Column(
-        Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),  primary_key=True
+        Uuid,
+        ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
     season = Column(Integer, index=True, primary_key=True)
     episode = Column(Integer, index=True, primary_key=True)
@@ -72,7 +80,7 @@ class Comments(Base):
     anime_id = Column(
         Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE")
     )
-    comment_id = Column(Integer, unique=True, index=True,  primary_key=True)
+    comment_id = Column(Integer, unique=True, index=True, primary_key=True)
     username = Column(
         String(32), ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE")
     )
@@ -83,9 +91,13 @@ class UserAnimeStarsCount(Base):
     __tablename__ = "user_anime_stars_count"
 
     username = Column(
-        String(32), ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE"),  primary_key=True
+        String(32),
+        ForeignKey("user.username", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
     anime_id = Column(
-        Uuid, ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),  primary_key=True
+        Uuid,
+        ForeignKey("anime.anime_id", onupdate="CASCADE", ondelete="CASCADE"),
+        primary_key=True,
     )
     stars = Column(Integer)

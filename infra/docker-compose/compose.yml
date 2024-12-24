@@ -1,0 +1,11 @@
+networks:
+  backend-network:
+    name: backend-network
+
+volumes:
+  minio-data:
+    driver: local
+    name: minio-data
+  postgres-data:
+    driver: local
+    name: postgres-data

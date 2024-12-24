@@ -1,0 +1,4 @@
+services:
+  auth-service:
+    ports:
+      - "10001:9000"

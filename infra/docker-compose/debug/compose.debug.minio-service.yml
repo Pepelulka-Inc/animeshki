@@ -1,0 +1,7 @@
+services:
+  minio-service:
+    ports:
+      - "10002:8000"
+  minio:
+    ports:
+      - "10003:9001"

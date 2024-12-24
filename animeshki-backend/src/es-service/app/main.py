@@ -5,6 +5,7 @@ from kafka import get_kafka_consumer
 from settings import HANDLER_ENDPOINT, SERVICE_PORT, SERVICE_HOST
 from handlers import search_anime
 
+
 # при перед стартом приложения инициализируются все необходимые сервисы
 # при завершении все клиенты сервисов закрываются
 def create_app() -> Application:

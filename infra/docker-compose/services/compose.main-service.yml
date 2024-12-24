@@ -1,0 +1,16 @@
+services:
+  main-service:
+    build:
+      context: ../../animeshki-backend/src/animeshki
+      dockerfile: Dockerfile
+    container_name: main-animeshki-service
+    expose:
+      - "9002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL
+    networks:
+      - backend-network
+    restart: always

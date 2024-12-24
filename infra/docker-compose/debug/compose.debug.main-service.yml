@@ -1,0 +1,4 @@
+services:
+  main-service:
+    ports:
+      - "10000:9002"

@@ -1,0 +1,4 @@
+services:
+  es-service:
+    ports:
+      - "10004:8001"

@@ -1,0 +1,16 @@
+services:
+  auth-service:
+    build:
+      context: ../../animeshki-backend/src/animeshki
+      dockerfile: auth.Dockerfile
+    container_name: auth-service
+    expose:
+      - "9000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL
+    networks:
+      - backend-network
+    restart: always

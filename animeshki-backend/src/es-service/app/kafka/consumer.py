@@ -31,7 +31,7 @@ class KafkaConsumer:
             self.consumer = None
             self._initialized = True
 
-# создание топика, через который происходит общение с другим сервисом
+    # создание топика, через который происходит общение с другим сервисом
     def create_topic(self):
         admin_client = AdminClient({"bootstrap.servers": self.bootstrap_server})
         topic_list = [
@@ -42,19 +42,19 @@ class KafkaConsumer:
         except Exception as e:
             logger.error(f"Failed to create topic: {e}")
 
-# часть инициализации кафки
+    # часть инициализации кафки
     async def run(self, app: Application):
         asyncio.create_task(self.consume())
 
     async def stop(self, app: Application):
         await self.consumer.stop()
 
-# обработка сообщений, приходящих с топика 
-# в теле сообщения должно быть только 2 поля: action и body
-# всего 2 вида action: add и delete
-# в body всегда хранится список, наполнение которого зависит от action
-# если action = delete, в списке просто хранятся id аниме, которые нужно удалить
-# если action = add, список состоит из пар title и id
+    # обработка сообщений, приходящих с топика
+    # в теле сообщения должно быть только 2 поля: action и body
+    # всего 2 вида action: add и delete
+    # в body всегда хранится список, наполнение которого зависит от action
+    # если action = delete, в списке просто хранятся id аниме, которые нужно удалить
+    # если action = add, список состоит из пар title и id
     async def consume(self):
         self.consumer = AIOKafkaConsumer(
             KAFKA_TOPIC,

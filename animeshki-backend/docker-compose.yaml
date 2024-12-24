@@ -6,8 +6,16 @@ services:
       - POSTGRES_USER
       - POSTGRES_PASSWORD
       - POSTGRES_DB
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}" ]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
     expose:
       - "5432"
+    ports:
+      - "15432:5432" # Временно прокинуто в целях дебага
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
@@ -29,10 +37,12 @@ services:
       - MINIO_SERVICE_BUCKET_NAME
     expose:
       - "8000"
+    ports:
+      - "9005:8000" # Временно прокинуто в целях дебага
     networks:
       - backend-network
-      - minio-service-network
     restart: always
+
   minio:
     image: minio/minio:latest
     container_name: minio
@@ -40,13 +50,13 @@ services:
       - MINIO_ROOT_USER
       - MINIO_ROOT_PASSWORD
     ports:
-      - "9001:9001"  # Порт для MinIO Console
+      - "9001:9001" # Временно прокинуто в целях дебага
     expose:
       - "9000"
     volumes:
       - minio-data:/data  # Точка монтирования для хранения данных
     networks:
-      - minio-service-network
+      - backend-network
     command: [ "server", "/data", "--console-address", ":9001" ]
     restart: always
 
@@ -106,9 +116,11 @@ services:
   es-service:
     build:
       context: ./src/es-service 
-    container_name: python-app
+    container_name: es-service
     expose:
       - "8001"
+    ports:
+      - "7777:8001" # Временно прокинуто в целях дебага
     depends_on:
       kafka:
         condition: service_healthy
@@ -121,11 +133,45 @@ services:
     networks:
       - backend-network
 
+  auth-service:
+    build:
+      context: ./src/animeshki
+      dockerfile: auth.Dockerfile
+    container_name: auth-service
+    expose:
+      - "9000"
+    ports:
+      - "1234:9000" # Временно прокинуто в целях дебага
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL
+    networks:
+      - backend-network
+    restart: always
+
+  main-service:
+    build:
+      context: ./src/animeshki
+      dockerfile: Dockerfile
+    container_name: main-animeshki-service
+    expose:
+      - "9002"
+    ports:
+      - "6666:9002" # Временно прокинуто в целях дебага
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL
+    networks:
+      - backend-network
+    restart: always
+
 networks:
   backend-network:
     name: backend-network
-  minio-service-network:
-    name: minio-service-network
 
 volumes:
   minio-data:
@@ -134,4 +180,3 @@ volumes:
   postgres-data:
     driver: local
     name: postgres-data
-

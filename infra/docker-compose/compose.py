@@ -111,7 +111,7 @@ def command_up(_args, debug=False, detach=False):
     success = filter_args(args)
     if not success:
         print(
-            f"Что-то накосячено с набором сервисов. Эти сервисы не нашли своих зависимостей: {[arg for arg in args if arg not in result]}"
+            f"Что-то накосячено с набором сервисов. Эти сервисы не нашли своих зависимостей"
         )
         return
     compose_up(args, debug, detach)
@@ -130,11 +130,6 @@ def command_build(_args):
             return
     args = _args.copy()
     success = filter_args(args)
-    if not success:
-        print(
-            f"Что-то накосячено с набором сервисов. Эти сервисы не нашли своих зависимостей: {[arg for arg in args if arg not in result]}"
-        )
-        return
     compose_build(args)
 
 

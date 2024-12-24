@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY ./app.py __init__.py ./
 COPY ./infrastructure ./infrastructure
+COPY ./domain ./domain
 COPY ./api ./api
 
 ENTRYPOINT ["python"]

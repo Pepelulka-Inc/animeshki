@@ -22,6 +22,7 @@ SERVICES = [
     Service(short_name="nginx", compose_name="nginx", depends_on=["minio"]),
     Service(short_name="search", compose_name="search-service", depends_on=[]),
     Service(short_name="minio", compose_name="minio-service", depends_on=[]),
+    Service(short_name="display", compose_name="display-service", depends_on=["auth"]),
 ]
 
 SERVICES_DICT = {service.short_name: service for service in SERVICES}

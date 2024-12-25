@@ -1,0 +1,4 @@
+services:
+  display-service:
+    ports:
+      - "10006:8000"

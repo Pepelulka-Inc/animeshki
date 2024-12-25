@@ -1,0 +1,44 @@
+<html><head><base href=""/>
+  <!DOCTYPE html>
+  <meta charset="UTF-8">
+  <title>Animeshki - Register</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/register.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  </head>
+  <body>
+  
+  <div class="register-container">
+    <h1 class="register-title">Create Account</h1>
+    <form id="register-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" id="username" class="form-input" required>
+        <div class="error-message" id="username-error">Username must be at least 3 characters long</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" class="form-input" required>
+        <div class="password-strength">
+          <div class="password-strength-bar" id="password-strength-bar"></div>
+        </div>
+        <div class="error-message" id="password-error">Password must be at least 8 characters long</div>
+      </div>
+      
+      <div class="form-group">
+        <label for="confirm-password">Confirm Password</label>
+        <input type="password" id="confirm-password" class="form-input" required>
+        <div class="error-message" id="confirm-password-error">Passwords do not match</div>
+      </div>
+  
+      <button type="submit" class="register-btn">Register</button>
+    </form>
+  
+    <div class="login-link">
+      Already have an account? <a href="http://localhost:8000/login">Login here</a> <!-- change URL -->
+    </div>
+  </div>
+  
+  <script src="/static/js/register.js"> </script>
+  
+  </body></html>

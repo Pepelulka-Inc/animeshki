@@ -6,7 +6,7 @@ WORKDIR /root/
 # Установка mc (minio client)
 RUN apt-get update
 RUN apt install -y curl dos2unix
-RUN curl https://dl.min.io/client/mc/release/linux-amd64/mc -o ./mc
+COPY ./bin/mc ./mc
 RUN chmod +x ./mc
 RUN mv ./mc /usr/bin
 

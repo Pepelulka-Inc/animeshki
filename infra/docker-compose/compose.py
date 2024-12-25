@@ -19,7 +19,7 @@ SERVICES = [
     Service(short_name="postgres", compose_name="postgres", depends_on=[]),
     Service(short_name="auth", compose_name="auth-service", depends_on=["postgres"]),
     Service(short_name="main", compose_name="main-service", depends_on=["postgres"]),
-    Service(short_name="nginx", compose_name="nginx", depends_on=["minio"]),
+    Service(short_name="nginx", compose_name="nginx", depends_on=["auth", "display"]),
     Service(short_name="search", compose_name="search-service", depends_on=[]),
     Service(short_name="minio", compose_name="minio-service", depends_on=[]),
     Service(short_name="display", compose_name="display-service", depends_on=["auth"]),

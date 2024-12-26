@@ -40,7 +40,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
                 title=anime.title,
                 description=anime.description,
                 picture_minio_path=anime.picture_minio_path,
-                mal_id=anime.mal_id
+                mal_id=anime.mal_id,
             )
 
             await session.commit()
@@ -49,6 +49,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
         _logger.warning(f"Can't give anime by id: {e}")
         return res_error("Something went wrong")
 
+
 async def post_animes_by_ids(request: web.Request) -> web.Response:
     """
     /POST anime/get/many
@@ -56,12 +57,10 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
     Получение списка аниме по списку айди
     """
     data = await request.json()
-    ids = data['ids']
+    ids = data["ids"]
     try:
         async with Session() as session:
-            result = await session.execute(
-                select(Anime).where(Anime.anime_id.in_(ids))
-            )
+            result = await session.execute(select(Anime).where(Anime.anime_id.in_(ids)))
             animes = result.scalars().all()
             result = {}
             for anime in animes:
@@ -70,7 +69,7 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
                     title=anime.title,
                     description=anime.description,
                     picture_minio_path=anime.picture_minio_path,
-                    mal_id=anime.mal_id
+                    mal_id=anime.mal_id,
                 )
                 result[str(anime.anime_id)] = pydantic_model.model_dump()
 
@@ -102,7 +101,7 @@ async def add_anime(request: web.Request) -> web.Response:
                 title=anime_create.title,
                 description=anime_create.description,
                 picture_minio_path=anime_create.picture_minio_path,
-                mal_id=anime_create.mal_id
+                mal_id=anime_create.mal_id,
             )
 
             session.add(new_anime)
@@ -170,7 +169,6 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
         data = await request.json()
         username = data["username"]
         comment_text = data["text"]
-
 
         if not comment_text or not username:
             return web.json_response(

@@ -7,7 +7,7 @@ from pydantic import ValidationError
 from sqlalchemy.future import select
 
 from auth import SECRET_KEY
-from infrastructure.database.models import Anime, Comments
+from infrastructure.database.models import Anime, Comments, UserAnimeStarsCount
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel
 
@@ -196,4 +196,87 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
         return web.json_response({"error": "Invalid anime ID format."}, status=400)
     except Exception as e:
         _logger.error(f"Error adding comment for anime ID {anime_id}: {e}")
+        return web.json_response({"error": str(e)}, status=500)
+
+
+async def rate_anime(request: web.Request) -> web.Response:
+    """
+    /POST anime/{anime_id}/rate
+
+    Оценка фильма по 10-балльной шкале
+    """
+
+    anime_id = request.match_info["anime_id"]
+
+    try:
+        anime_id = uuid.UUID(anime_id)
+        data = await request.json()
+        rating = data.get("rating")
+
+        if rating is None or not (1 <= rating <= 10):
+            return web.json_response(
+                {"error": "Rating must be an integer between 1 and 10."}, status=400
+            )
+
+        token = request.cookies.get("access_token")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        username = payload.get("username")
+
+        _logger.info(
+            f"Rating anime ID: {anime_id} by user: {username} with rating: {rating}"
+        )
+
+        async with Session() as session:
+            new_rating = UserAnimeStarsCount(
+                anime_id=anime_id, username=username, stars=rating
+            )
+
+            session.add(new_rating)
+            await session.commit()
+
+            _logger.info(f"Rating added for anime ID: {anime_id} by user: {username}")
+            return web.json_response({"msg": "Rating added successfully."}, status=201)
+
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
+    except jwt.ExpiredSignatureError:
+        return web.json_response({"error": "Token has expired."}, status=401)
+    except jwt.InvalidTokenError:
+        return web.json_response({"error": "Invalid token."}, status=401)
+    except Exception as e:
+        _logger.error(f"Error adding rating for anime ID {anime_id}: {e}")
+        return web.json_response({"error": str(e)}, status=500)
+
+
+async def get_anime_rates(request: web.Request) -> web.Response:
+    """
+    /GET anime/{anime_id}/rate
+
+    Получение всех оценок фильма
+    """
+
+    anime_id = request.match_info["anime_id"]
+
+    try:
+        anime_id = uuid.UUID(anime_id)
+
+        async with Session() as session:
+            result = await session.execute(
+                select(UserAnimeStarsCount).where(
+                    UserAnimeStarsCount.anime_id == anime_id
+                )
+            )
+            ratings = result.fetchall()
+
+            ratings_list = [
+                {"username": rating.username, "rating": rating.stars}
+                for rating in ratings
+            ]
+
+            return web.json_response({"ratings": ratings_list}, status=200)
+
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
+    except Exception as e:
+        _logger.error(f"Error retrieving ratings for anime ID {anime_id}: {e}")
         return web.json_response({"error": str(e)}, status=500)

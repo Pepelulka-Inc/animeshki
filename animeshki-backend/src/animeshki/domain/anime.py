@@ -8,9 +8,11 @@ class AnimeModel(BaseModel):
     title: str
     description: str
     picture_minio_path: str
+    mal_id: int | None
 
 
 class AnimeCreateModel(BaseModel):
     title: str
     description: str
     picture_minio_path: str
+    mal_id: int | None

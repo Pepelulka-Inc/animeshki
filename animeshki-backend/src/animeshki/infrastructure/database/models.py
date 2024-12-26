@@ -46,6 +46,7 @@ class Anime(Base):
     title = Column(String(256), unique=True, index=True)
     description = Column(String(512), index=True)
     picture_minio_path = Column(String(256), unique=True, index=True)
+    mal_id = Column(Integer, index=True)
 
 
 class Anime_stat(Base):

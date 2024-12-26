@@ -93,28 +93,32 @@ async def get_comments_for_anime_by_id(request: web.Request) -> web.Response:
     _logger.info(f"Fetching comments for anime ID: {anime_id}")
 
     try:
+        anime_id = uuid.UUID(anime_id)
         async with Session() as session:
             result = await session.execute(
-                select(Comments).where(Comments.anime_id == anime_id)
+                select(Comments.username, Comments.body).where(
+                    Comments.anime_id == anime_id
+                )
             )
-            comments = result.scalars().all()
+            comments = result.fetchall()
             if comments is None:
-                return res_not_found()
-            comments_list = [
-                {
-                    "id": comment.comment_id,
-                    "text": comment.body,
-                    "user": comment.username,
-                }
-                for comment in comments
-            ]
+                comments_list = []
+            else:
+                comments_list = [
+                    {
+                        "text": comment.body,
+                        "user": comment.username,
+                    }
+                    for comment in comments
+                ]
 
             _logger.info(
                 f"Found {len(comments_list)} comments for anime ID: {anime_id}"
             )
             await session.commit()
             return web.json_response({"comments": comments_list})
-
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
     except Exception as e:
         _logger.error(f"Error fetching comments for anime ID {anime_id}: {e}")
         return web.json_response({"error": str(e)}, status=500)
@@ -129,6 +133,7 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
 
     anime_id = request.match_info["anime_id"]
     try:
+        anime_id = uuid.UUID(anime_id)
         data = await request.json()
         comment_text = data["text"]
         username = data["username"]
@@ -141,7 +146,9 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
         _logger.info(f"Adding comment for anime ID: {anime_id} by user: {username}")
 
         async with Session() as session:
-            new_comment = Comments(anime_id=anime_id, body=comment_text, username=username)
+            new_comment = Comments(
+                anime_id=anime_id, body=comment_text, username=username
+            )
 
             session.add(new_comment)
             await session.commit()
@@ -149,6 +156,8 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
             _logger.info(f"Comment added for anime ID: {anime_id} by user: {username}")
             return web.json_response({"msg": "Comment added successfully."}, status=201)
 
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
     except Exception as e:
         _logger.error(f"Error adding comment for anime ID {anime_id}: {e}")
         return web.json_response({"error": str(e)}, status=500)

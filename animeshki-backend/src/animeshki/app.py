@@ -1,6 +1,11 @@
 from aiohttp import web
 
-from api.anime_handlers import get_anime_by_id, add_anime, get_comments_for_anime_by_id, set_comment_for_anime_by_id
+from api.anime_handlers import (
+    get_anime_by_id,
+    add_anime,
+    get_comments_for_anime_by_id,
+    set_comment_for_anime_by_id,
+)
 from api.user_handlers import get_favorites, add_favorite
 from infrastructure.database.engine import init_db_and_tables
 

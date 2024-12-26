@@ -49,6 +49,37 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
         _logger.warning(f"Can't give anime by id: {e}")
         return res_error("Something went wrong")
 
+async def post_animes_by_ids(request: web.Request) -> web.Response:
+    """
+    /POST anime/get/many
+
+    Получение списка аниме по списку айди
+    """
+    data = await request.json()
+    ids = data['ids']
+    try:
+        async with Session() as session:
+            result = await session.execute(
+                select(Anime).where(Anime.anime_id.in_(ids))
+            )
+            animes = result.scalars().all()
+            result = {}
+            for anime in animes:
+                pydantic_model = AnimeModel(
+                    anime_id=str(anime.anime_id),
+                    title=anime.title,
+                    description=anime.description,
+                    picture_minio_path=anime.picture_minio_path,
+                    mal_id=anime.mal_id
+                )
+                result[str(anime.anime_id)] = pydantic_model.model_dump()
+
+            await session.commit()
+            return web.json_response(result)
+    except Exception as e:
+        _logger.warning(f"Can't give animes by ids: {e}")
+        return res_error("Something went wrong")
+
 
 async def add_anime(request: web.Request) -> web.Response:
     """

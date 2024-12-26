@@ -3,8 +3,8 @@ import logging
 from aiohttp import web
 from sqlalchemy.future import select
 
-from animeshki.infrastructure.database.models import Favorites
-from animeshki.infrastructure.database.engine import Session
+from infrastructure.database.models import Favorites
+from infrastructure.database.engine import Session
 
 
 _logger = logging.getLogger(__name__)

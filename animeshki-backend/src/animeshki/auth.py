@@ -1,5 +1,4 @@
 import os
-import asyncio
 from datetime import datetime, timedelta
 from functools import wraps
 from typing import Callable, Dict
@@ -51,6 +50,7 @@ def check_credentials_admin(func: Callable) -> Callable:
     """
     Декоратор проверяющий привелегию, вешается на все админские ручки
     """
+
     @wraps(func)
     async def wrapper(request: web.Request) -> web.Response:
         token = request.cookies.get("access_token")
@@ -192,11 +192,17 @@ async def refresh_access_token(request: web.Request) -> web.Response:
         return web.json_response({"msg": "Invalid refresh token"}, status=401)
 
 
+async def on_startup(app):
+    await init_db_and_tables()
+
+
 app = web.Application()
-app.router.add_post("/register", register)
-app.router.add_post("/login", login)
-app.router.add_post("/refresh", refresh_access_token)
+app.router.add_post("/api/v1/register", register)
+app.router.add_post("/api/v1/login", login)
+app.router.add_post("/api/v1/refresh", refresh_access_token)
+
+app.on_startup.append(on_startup)
 
 if __name__ == "__main__":
-    asyncio.run(init_db_and_tables())
+    # asyncio.run(init_db_and_tables())
     web.run_app(app, port=9000)

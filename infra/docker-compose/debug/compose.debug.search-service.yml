@@ -2,3 +2,6 @@ services:
   es-service:
     ports:
       - "10004:8001"
+  elasticsearch:
+    ports:
+      - "9200:9200"

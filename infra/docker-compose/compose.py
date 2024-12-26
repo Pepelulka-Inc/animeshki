@@ -131,19 +131,12 @@ def command_up(_args, debug=False, detach=False):
     compose_up(args, debug, detach)
 
 
-<<<<<<< HEAD
-def command_down_all():
-    args = SERVICES_LIST
-    assert filter_args_inplace(args)
-    compose_down(args)
-=======
 def command_down(_args, force=False, volume=False):
     # Проверяем что пользователь ввел верные названия сервисов
     for s_name in _args:
         if s_name not in SERVICES_DICT:
             print(f"Нет такого сервиса: {s_name}")
             return
->>>>>>> origin/main
 
     args = resolve_deps(_args)
     success = filter_args_inplace(args)

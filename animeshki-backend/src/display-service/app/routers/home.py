@@ -4,6 +4,7 @@ from datetime import datetime
 import jwt
 import os
 from dotenv import load_dotenv
+from token_work import verify_access_token
 
 
 load_dotenv()
@@ -18,15 +19,7 @@ router = APIRouter()
 @router.get(path='/')
 async def show_register_page(request: Request):
     token = request.cookies.get("access_token")
-    print(token)
-    if await verify_access_token(token):
+    if verify_access_token(token):
         return template.TemplateResponse("home.html", {"request": request})
     else:
         return
-
-async def verify_access_token(token: str):
-    payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    expire = payload.get("exp")
-    if datetime.fromtimestamp(expire) < datetime.now():
-        return False
-    return True

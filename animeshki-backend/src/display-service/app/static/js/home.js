@@ -25,18 +25,12 @@ document.addEventListener('DOMContentLoaded', function() {
         searchContainer.classList.remove('active');
       }
     });
-  
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      console.log('Searching for:', searchTerm);
-    });
 
     searchInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') { // Проверяем, нажата ли клавиша Enter
-            const searchTerm = searchInput.value.trim(); // Получаем текст из поля ввода
+        if (e.key === 'Enter') { 
+            const searchTerm = searchInput.value.trim();
             if (searchTerm) {
-                // Перенаправляем пользователя на новую страницу с передачей параметра запроса
-                // window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`;
+                window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`; // change it!!!!
                 console.log('Searching for:', searchTerm);
             }
         }

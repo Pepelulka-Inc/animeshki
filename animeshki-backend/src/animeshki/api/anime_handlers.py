@@ -1,10 +1,12 @@
 import logging
 import uuid
 
+import jwt
 from aiohttp import web
 from pydantic import ValidationError
 from sqlalchemy.future import select
 
+from auth import SECRET_KEY
 from infrastructure.database.models import Anime, Comments
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel
@@ -166,8 +168,10 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
     anime_id = request.match_info["anime_id"]
     try:
         anime_id = uuid.UUID(anime_id)
+        token = request.cookies.get("access_token")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        username = payload.get("username")
         data = await request.json()
-        username = data["username"]
         comment_text = data["text"]
 
         if not comment_text or not username:

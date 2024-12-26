@@ -135,8 +135,9 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
     try:
         anime_id = uuid.UUID(anime_id)
         data = await request.json()
-        comment_text = data["text"]
         username = data["username"]
+        comment_text = data["text"]
+
 
         if not comment_text or not username:
             return web.json_response(

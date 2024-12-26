@@ -3,7 +3,6 @@ import jwt
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
@@ -16,4 +15,8 @@ def verify_access_token(token: str):
         return False
     return True
 
-def refresh_access_token()
+def refresh_access_token():
+    return
+
+def get_username_by_token(token: str):
+    return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM]).get("sub")

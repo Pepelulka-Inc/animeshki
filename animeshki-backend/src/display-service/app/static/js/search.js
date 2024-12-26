@@ -2,18 +2,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector('.search-input');
     const animeCards = document.querySelectorAll('.anime-card');
   
-    searchInput.addEventListener('input', function(e) {
-      const searchTerm = e.target.value.toLowerCase();
+    // searchInput.addEventListener('input', function(e) {
+    //   const searchTerm = e.target.value.toLowerCase();
       
-      animeCards.forEach(card => {
-        const title = card.querySelector('.anime-title').textContent.toLowerCase();
-        if (title.includes(searchTerm)) {
-          card.style.display = 'block';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    });
+    //   animeCards.forEach(card => {
+    //     const title = card.querySelector('.anime-title').textContent.toLowerCase();
+    //     if (title.includes(searchTerm)) {
+    //       card.style.display = 'block';
+    //     } else {
+    //       card.style.display = 'none';
+    //     }
+    //   });
+    // });
   
     // Add hover effects
     animeCards.forEach(card => {
@@ -24,5 +24,15 @@ document.addEventListener('DOMContentLoaded', function() {
       card.addEventListener('mouseout', function() {
         this.style.transform = 'translateY(0)';
       });
+    });
+
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') { 
+            const searchTerm = searchInput.value.trim();
+            if (searchTerm) {
+                window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`; // change it!!!!
+                console.log('Searching for:', searchTerm);
+            }
+        }
     });
   });

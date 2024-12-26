@@ -18,8 +18,8 @@ async def on_startup(app):
 
 
 app = web.Application()
-app.router.add_post("/favorites/get", get_favorites)
-app.router.add_post("/favorites/add", add_favorite)
+app.router.add_post("/{username}/favorites/get", get_favorites)
+app.router.add_post("/{username}/favorites/add", add_favorite)
 
 app.router.add_get("/anime/get/{anime_id}", get_anime_by_id)
 app.router.add_post("/anime/get/many", post_animes_by_ids)

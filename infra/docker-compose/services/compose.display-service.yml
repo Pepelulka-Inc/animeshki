@@ -8,6 +8,8 @@ services:
       - "8000"
     depends_on:
       - auth-service
+    environment:
+      - SECRET_KEY
     networks:
       - backend-network
     restart: always

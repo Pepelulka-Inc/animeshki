@@ -4,7 +4,7 @@ import os.path
 
 import prettytable
 
-from attr import dataclass
+from dataclasses import dataclass
 from typing import List
 
 

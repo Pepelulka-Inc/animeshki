@@ -77,8 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
               'Content-Type': 'application/json',
           },
-          body: JSON.stringify(userData),
-          mode: "no-cors"
+          body: JSON.stringify(userData)
       });
 
       if (response.ok) {

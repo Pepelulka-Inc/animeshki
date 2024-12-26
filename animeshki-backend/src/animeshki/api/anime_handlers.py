@@ -40,6 +40,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
                 title=anime.title,
                 description=anime.description,
                 picture_minio_path=anime.picture_minio_path,
+                mal_id=anime.mal_id
             )
 
             await session.commit()
@@ -70,6 +71,7 @@ async def add_anime(request: web.Request) -> web.Response:
                 title=anime_create.title,
                 description=anime_create.description,
                 picture_minio_path=anime_create.picture_minio_path,
+                mal_id=anime_create.mal_id
             )
 
             session.add(new_anime)

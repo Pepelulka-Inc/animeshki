@@ -29,7 +29,6 @@ SERVICES_DICT = {service.short_name: service for service in SERVICES}
 
 SERVICES_LIST = [service.short_name for service in SERVICES]
 
-
 def command_list():
     table = prettytable.PrettyTable()
     table.field_names = [
@@ -69,11 +68,15 @@ def compose_up(args, debug, detach):
     subprocess.call(cmdline)
 
 
-def compose_down(args):
+def compose_down(args, force=False, volume=False):
     cmdline = ["docker-compose", "-f", "compose.yml"]
     for arg in args:
         cmdline += ["-f", f"services/compose.{SERVICES_DICT[arg].compose_name}.yml"]
     cmdline.append("down")
+    if force:
+        cmdline += ["-t", "0"]
+    if volume:
+        cmdline.append("-v")
     subprocess.call(cmdline)
 
 
@@ -127,11 +130,21 @@ def command_up(_args, debug=False, detach=False):
     compose_up(args, debug, detach)
 
 
-def command_down_all():
-    args = SERVICES_LIST
-    assert filter_args_inplace(args)
-    compose_down(args)
+def command_down(_args, force=False, volume=False):
+    # Проверяем что пользователь ввел верные названия сервисов
+    for s_name in _args:
+        if s_name not in SERVICES_DICT:
+            print(f"Нет такого сервиса: {s_name}")
+            return
 
+    args = resolve_deps(_args)
+    success = filter_args_inplace(args)
+    if not success:
+        print(
+            f"Что-то накосячено с набором сервисов."
+        )
+        return
+    compose_down(args, force, volume)
 
 def command_build(_args):
     for s_name in _args:
@@ -151,7 +164,7 @@ def command_build(_args):
 def main():
     parser = argparse.ArgumentParser(
         prog="compose.py",
-        description="Мяу мяу мяу. Инструкция в README.md. Список доступных действий: list, up, up-all, down-all, build, build-all",
+        description="Описание в README.md :)",
         epilog="",
     )
     parser.add_argument(
@@ -161,6 +174,8 @@ def main():
     parser.add_argument("args", nargs="*")
     parser.add_argument("-d", "--debug", action="store_true")
     parser.add_argument("-D", "--detach", action="store_true")
+    parser.add_argument("-f", "--force", action="store_true")
+    parser.add_argument("-v", "--volume", action="store_true")
 
     args = parser.parse_args()
 
@@ -169,9 +184,11 @@ def main():
     elif args.action == "up":
         command_up(args.args, args.debug, args.detach)
     elif args.action == "up-all":
-        command_up(SERVICES_LIST, args.debug)
+        command_up(SERVICES_LIST, args.debug, args.detach)
+    elif args.action == "down":
+        command_down(args.args, args.force, args.volume)
     elif args.action == "down-all":
-        command_down_all()
+        command_down(SERVICES_LIST, args.force, args.volume)
     elif args.action == "build":
         command_build(args.args)
     elif args.action == "build-all":

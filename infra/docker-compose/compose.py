@@ -1,5 +1,6 @@
 import argparse
 import subprocess
+import os.path
 
 import prettytable
 
@@ -42,15 +43,25 @@ def command_list():
         )
     print(table)
 
+def resolve_deps(args):
+    result = args.copy()
+    for arg in args:
+        for dep in SERVICES_DICT[arg].depends_on:
+            if dep not in result:
+                result.append(dep)
+    return result
 
 def compose_up(args, debug, detach):
     cmdline = ["docker-compose", "-f", "compose.yml"]
     for arg in args:
         cmdline += ["-f", f"services/compose.{SERVICES_DICT[arg].compose_name}.yml"]
         if debug:
+            debug_compose_file_path = f"debug/compose.debug.{SERVICES_DICT[arg].compose_name}.yml"
+            if not os.path.exists(debug_compose_file_path):
+                continue
             cmdline += [
                 "-f",
-                f"debug/compose.debug.{SERVICES_DICT[arg].compose_name}.yml",
+                debug_compose_file_path,
             ]
     cmdline.append("up")
     if detach:
@@ -74,7 +85,7 @@ def compose_build(args):
     subprocess.call(cmdline)
 
 
-def filter_args(args) -> bool:
+def filter_args_inplace(args) -> bool:
     args = list(dict.fromkeys(args))
 
     # Очень костыльная и медленная реализация топологической сортировки
@@ -106,11 +117,11 @@ def command_up(_args, debug=False, detach=False):
             print(f"Нет такого сервиса: {s_name}")
             return
 
-    args = _args.copy()
-    success = filter_args(args)
+    args = resolve_deps(_args)
+    success = filter_args_inplace(args)
     if not success:
         print(
-            f"Что-то накосячено с набором сервисов. Эти сервисы не нашли своих зависимостей"
+            f"Что-то накосячено с набором сервисов."
         )
         return
     compose_up(args, debug, detach)
@@ -118,7 +129,7 @@ def command_up(_args, debug=False, detach=False):
 
 def command_down_all():
     args = SERVICES_LIST
-    assert filter_args(args)
+    assert filter_args_inplace(args)
     compose_down(args)
 
 
@@ -127,8 +138,13 @@ def command_build(_args):
         if s_name not in SERVICES_DICT:
             print(f"Нет такого сервиса: {s_name}")
             return
-    args = _args.copy()
-    success = filter_args(args)
+    args = resolve_deps(_args)
+    success = filter_args_inplace(args)
+    if not success:
+        print(
+            f"Что-то накосячено с набором сервисов."
+        )
+        return
     compose_build(args)
 
 

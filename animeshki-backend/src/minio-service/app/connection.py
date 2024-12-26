@@ -1,4 +1,5 @@
 import logging
+from asyncio import StreamReader
 from typing import AsyncGenerator, List, Dict
 
 import aioboto3
@@ -18,6 +19,10 @@ class S3Client:
         response_from_s3 = await self.s3_client.get_object(Bucket=bucket, Key=filename)
         async for chunk in response_from_s3["Body"].iter_chunks():
             yield chunk
+
+    # in_stream должен иметь метод read(n)
+    async def upload_file_from_stream(self, in_stream, bucket: str, filename: str):
+        await self.s3_client.upload_fileobj(in_stream, bucket, filename)
 
     async def get_file_list(self, bucket: str) -> List[Dict[str, str]]:
         response = await self.s3_client.list_objects_v2(Bucket=bucket)

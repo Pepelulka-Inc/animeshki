@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('username-error').style.display = 'none';
     }
 
-    if(password.value.length < 8) {
+    if(password.value.length < 6) {
       document.getElementById('password-error').style.display = 'block';
       isValid = false;
     } else {
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function() {
         password: password.value
       };
 
-      const response = await fetch('http://localhost:10001/api/v1/register', { // change URL
+      const response = await fetch('http://localhost/api/v1/register', { // change URL
           method: 'POST',
           headers: {
               'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       if (response.ok) {
-          window.location.href = 'http://localhost:8000/login'; // change URL
+          window.location.href = 'http://localhost/login'; // change URL
       } else {
           document.getElementById('username-error').textContent = 'Username already exists';
           document.getElementById('username-error').style.display = 'block';

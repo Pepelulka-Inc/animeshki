@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const password = document.getElementById('password').value;
 
     try {
-      const response = await fetch('http://localhost:10001/api/v1/login', { // change URL
+      const response = await fetch('http://localhost/api/v1/login', { // change URL
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       if (response.ok) {
-        window.location.href = 'http://localhost:8000/'; // change URL
+        window.location.href = 'http://localhost/'; // change URL
       } else {
         const data = await response.json();
         errorMessage.textContent = data.message || 'Invalid username or password';

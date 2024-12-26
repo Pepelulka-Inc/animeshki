@@ -1,11 +1,13 @@
 import logging
 import uuid
 
+import jwt
 from aiohttp import web
 from pydantic import ValidationError
 from sqlalchemy.future import select
 
-from infrastructure.database.models import Anime
+from auth import SECRET_KEY
+from infrastructure.database.models import Anime, Comments
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel
 
@@ -40,7 +42,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
                 title=anime.title,
                 description=anime.description,
                 picture_minio_path=anime.picture_minio_path,
-                mal_id=anime.mal_id
+                mal_id=anime.mal_id,
             )
 
             await session.commit()
@@ -49,6 +51,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
         _logger.warning(f"Can't give anime by id: {e}")
         return res_error("Something went wrong")
 
+
 async def post_animes_by_ids(request: web.Request) -> web.Response:
     """
     /POST anime/get/many
@@ -56,12 +59,10 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
     Получение списка аниме по списку айди
     """
     data = await request.json()
-    ids = data['ids']
+    ids = data["ids"]
     try:
         async with Session() as session:
-            result = await session.execute(
-                select(Anime).where(Anime.anime_id.in_(ids))
-            )
+            result = await session.execute(select(Anime).where(Anime.anime_id.in_(ids)))
             animes = result.scalars().all()
             result = {}
             for anime in animes:
@@ -70,7 +71,7 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
                     title=anime.title,
                     description=anime.description,
                     picture_minio_path=anime.picture_minio_path,
-                    mal_id=anime.mal_id
+                    mal_id=anime.mal_id,
                 )
                 result[str(anime.anime_id)] = pydantic_model.model_dump()
 
@@ -102,7 +103,7 @@ async def add_anime(request: web.Request) -> web.Response:
                 title=anime_create.title,
                 description=anime_create.description,
                 picture_minio_path=anime_create.picture_minio_path,
-                mal_id=anime_create.mal_id
+                mal_id=anime_create.mal_id,
             )
 
             session.add(new_anime)
@@ -113,3 +114,86 @@ async def add_anime(request: web.Request) -> web.Response:
         return res_error("Something went wrong")
 
     return web.json_response({"anime_id": str(new_anime_id)})
+
+
+async def get_comments_for_anime_by_id(request: web.Request) -> web.Response:
+    """
+    /GET anime/{anime_id}/comments
+
+    Получаем все комментарии для анимешки
+    """
+
+    anime_id = request.match_info["anime_id"]
+    _logger.info(f"Fetching comments for anime ID: {anime_id}")
+
+    try:
+        anime_id = uuid.UUID(anime_id)
+        async with Session() as session:
+            result = await session.execute(
+                select(Comments.username, Comments.body).where(
+                    Comments.anime_id == anime_id
+                )
+            )
+            comments = result.fetchall()
+            if comments is None:
+                comments_list = []
+            else:
+                comments_list = [
+                    {
+                        "text": comment.body,
+                        "user": comment.username,
+                    }
+                    for comment in comments
+                ]
+
+            _logger.info(
+                f"Found {len(comments_list)} comments for anime ID: {anime_id}"
+            )
+            await session.commit()
+            return web.json_response({"comments": comments_list})
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
+    except Exception as e:
+        _logger.error(f"Error fetching comments for anime ID {anime_id}: {e}")
+        return web.json_response({"error": str(e)}, status=500)
+
+
+async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
+    """
+    /POST anime/{anime_id}/comments
+
+    Оставляем комментарий к анимешке
+    """
+
+    anime_id = request.match_info["anime_id"]
+    try:
+        anime_id = uuid.UUID(anime_id)
+        token = request.cookies.get("access_token")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
+        username = payload.get("username")
+        data = await request.json()
+        comment_text = data["text"]
+
+        if not comment_text or not username:
+            return web.json_response(
+                {"error": "Text and user are required."}, status=400
+            )
+
+        _logger.info(f"Adding comment for anime ID: {anime_id} by user: {username}")
+
+        async with Session() as session:
+            new_comment = Comments(
+                anime_id=anime_id, body=comment_text, username=username
+            )
+
+            session.add(new_comment)
+            await session.commit()
+
+            _logger.info(f"Comment added for anime ID: {anime_id} by user: {username}")
+            return web.json_response({"msg": "Comment added successfully."}, status=201)
+
+    except ValueError:
+        return web.json_response({"error": "Invalid anime ID format."}, status=400)
+    except Exception as e:
+        _logger.error(f"Error adding comment for anime ID {anime_id}: {e}")
+        return web.json_response({"error": str(e)}, status=500)

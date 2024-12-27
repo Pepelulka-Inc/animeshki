@@ -3,6 +3,9 @@ networks:
     name: backend-network
 
 volumes:
+  model-data:
+    driver: local
+    name: model-data
   minio-data:
     driver: local
     name: minio-data

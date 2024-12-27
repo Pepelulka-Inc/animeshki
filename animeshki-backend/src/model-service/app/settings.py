@@ -9,7 +9,7 @@ DATA_PREFIX = './bin'
 USE_MINIO: bool = True if os.getenv("USE_MINIO", False) == "True" else False
 DEBUG: bool = True if os.getenv("DEBUG", False) == "True" else False
 # Настройки сервиса
-PORT: int = os.getenv("PORT", 8000)
+PORT: int = int(os.getenv("MODEL_PORT", 8000))
 
 # Настройки MODEL
 MODEL_SETTINGS: Dict[str, str] = {

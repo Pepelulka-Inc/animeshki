@@ -5,11 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: model-service
     expose:
-      - 14880
+      - MODEL_PORT
     volumes:
       - model-data:/root/bin/      
     environment:
-      - PORT=14880
+      - MODEL_PORT
       - MODEL_TRAIN_NUM_THREADS
     networks:
       - backend-network

@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
       card.addEventListener('mouseout', function() {
         this.style.transform = 'translateY(0)';
       });
+      card.addEventListener('click', () => {
+        window.location.href = '/anime'
+      })
     });
   
     const searchBtn = document.querySelector('.search-btn');
@@ -30,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Enter') { 
             const searchTerm = searchInput.value.trim();
             if (searchTerm) {
-                window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`; // change it!!!!
+                window.location.href = `/search?query=${encodeURIComponent(searchTerm)}`;
                 console.log('Searching for:', searchTerm);
             }
         }

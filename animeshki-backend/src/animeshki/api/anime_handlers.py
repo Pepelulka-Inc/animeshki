@@ -1,20 +1,13 @@
 import logging
 import uuid
 
-<<<<<<< HEAD
-=======
 import jwt
->>>>>>> origin/main
 from aiohttp import web
 from pydantic import ValidationError
 from sqlalchemy.future import select
 
-<<<<<<< HEAD
-from infrastructure.database.models import Anime
-=======
 from auth import SECRET_KEY
 from infrastructure.database.models import Anime, Comments, UserAnimeStarsCount
->>>>>>> origin/main
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel
 
@@ -49,10 +42,7 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
                 title=anime.title,
                 description=anime.description,
                 picture_minio_path=anime.picture_minio_path,
-<<<<<<< HEAD
-=======
                 mal_id=anime.mal_id,
->>>>>>> origin/main
             )
 
             await session.commit()
@@ -62,8 +52,6 @@ async def get_anime_by_id(request: web.Request) -> web.Response:
         return res_error("Something went wrong")
 
 
-<<<<<<< HEAD
-=======
 async def post_animes_by_ids(request: web.Request) -> web.Response:
     """
     /POST anime/get/many
@@ -94,7 +82,6 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
         return res_error("Something went wrong")
 
 
->>>>>>> origin/main
 async def add_anime(request: web.Request) -> web.Response:
     """
     /POST anime/add
@@ -116,10 +103,7 @@ async def add_anime(request: web.Request) -> web.Response:
                 title=anime_create.title,
                 description=anime_create.description,
                 picture_minio_path=anime_create.picture_minio_path,
-<<<<<<< HEAD
-=======
                 mal_id=anime_create.mal_id,
->>>>>>> origin/main
             )
 
             session.add(new_anime)
@@ -130,8 +114,6 @@ async def add_anime(request: web.Request) -> web.Response:
         return res_error("Something went wrong")
 
     return web.json_response({"anime_id": str(new_anime_id)})
-<<<<<<< HEAD
-=======
 
 
 async def get_comments_for_anime_by_id(request: web.Request) -> web.Response:
@@ -298,4 +280,3 @@ async def get_anime_rates(request: web.Request) -> web.Response:
     except Exception as e:
         _logger.error(f"Error retrieving ratings for anime ID {anime_id}: {e}")
         return web.json_response({"error": str(e)}, status=500)
->>>>>>> origin/main

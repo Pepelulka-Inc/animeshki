@@ -1,0 +1,96 @@
+<html><head><base href=""/>
+    <!DOCTYPE html>
+    <meta charset="UTF-8">
+    <title>Animeshki - Watch Anime</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/anime.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+    
+    <nav class="navbar">
+      <a class="logo">Animeshki</a>
+      <div class="nav-buttons">
+        <a href="http://localhost/" class="nav-btn">
+          <i class="fas fa-home"></i>
+          Home
+        </a>
+        <a href="http://localhost/favorites" class="nav-btn">
+          <i class="fas fa-star"></i>
+          Favorites
+        </a>
+      </div>
+    </nav>
+    
+    <main class="content">
+      <div class="anime-header">
+        <div class="anime-cover"></div>
+        <div class="anime-info">
+          <h1>Attack on Titan</h1>
+          <p class="anime-description">Centuries ago, mankind was slaughtered to near extinction by monstrous humanoid creatures called Titans, forcing humans to hide in fear behind enormous concentric walls...</p>
+          <div class="star-rating">
+            <button class="star-btn" data-rating="1"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="2"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="3"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="4"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="5"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="6"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="7"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="8"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="9"><i class="fas fa-star"></i></button>
+            <button class="star-btn" data-rating="10"><i class="fas fa-star"></i></button>
+          </div>
+          <div class="rating-actions">
+            <div class="rating-text">Current Rating: 4.5/5 (9,234 votes)</div>
+            <button class="favorite-btn">
+              <i class="fas fa-heart"></i>
+              Add to Favorites
+            </button>
+          </div>
+        </div>
+      </div>
+    
+      <section class="player-section">
+        <div class="episode-info">
+          <span>Season 4</span>
+          <span>Episode 16</span>
+        </div>
+        <div class="video-player">
+          <i class="fas fa-play fa-3x"></i>
+        </div>
+        <div class="episode-controls">
+          <button class="nav-btn">
+            <i class="fas fa-step-backward"></i>
+            Previous Episode
+          </button>
+          <button class="nav-btn">
+            Next Episode
+            <i class="fas fa-step-forward"></i>
+          </button>
+        </div>
+      </section>
+    
+      <section class="comments-section">
+        <h3>Comments</h3>
+        <div class="comments">
+          <div class="comment">
+            <strong>User123</strong>
+            <p>This episode was amazing! Can't wait for the next one!</p>
+          </div>
+          <div class="comment">
+            <strong>AnimeGuru</strong>
+            <p>The animation quality keeps getting better and better.</p>
+          </div>
+        </div>
+    
+        <form class="comment-form">
+          <textarea placeholder="Write your comment..." rows="4"></textarea>
+          <button type="submit" class="submit-btn">Post Comment</button>
+        </form>
+      </section>
+    </main>
+    
+    <script src="/static/js/anime.js"> </script>
+        
+    
+    </body></html>

@@ -5,6 +5,7 @@ from typing import Dict, List
 logging.basicConfig(level=logging.INFO)
 logger: logging.Logger = logging.getLogger("model-service.settings")
 
+DATA_PREFIX = 'bin'
 USE_MINIO: bool = True if os.getenv("USE_MINIO", False) == "True" else False
 DEBUG: bool = True if os.getenv("DEBUG", False) == "True" else False
 # Настройки сервиса
@@ -14,17 +15,15 @@ PORT: int = os.getenv("PORT", 8000)
 MODEL_SETTINGS: Dict[str, str] = {
     "EPOCHS": os.getenv("MODEL_TRAIN_EPOCHS", 100),
     "NO_COMPONENTS": os.getenv("MODEL_TRAIN_NO_COMPONENTS", 10),
-    "NUM_THREADS": os.getenv("MODEL_TRAIN_NUM_THREADS", 12),
+    "NUM_THREADS": os.getenv("MODEL_TRAIN_NUM_THREADS"),
     "FILENAME": os.getenv("MODEL_TRAIN_FILENAME", "rec_anime_model.h5"),
+    "DATASET_FILENAME": os.getenv("MODEL_TRAIN_DATASET_FILENAME", "dataset.csv"),
 }
 
 # Проверка обязательных переменных окружения:
 
 _REQUIRED_ENV_VARS: List[str] = [
-    MODEL_SETTINGS["EPOCHS"],
-    MODEL_SETTINGS["NO_COMPONENTS"],
-    MODEL_SETTINGS["FILENAME"],
-    MODEL_SETTINGS["NUM_THREADS"]
+    MODEL_SETTINGS["NUM_THREADS"],
 ]
 
 

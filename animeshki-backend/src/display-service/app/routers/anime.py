@@ -7,7 +7,8 @@ template = Jinja2Templates(directory="templates")
 router = APIRouter()
 
 @router.get(path='/anime')
-async def show_anime_page(request: Request):
+async def show_anime_page(request: Request, id: str):
+    print(id)
     token = request.cookies.get("access_token")
     if verify_access_token(token):
         # вот тут надо как-то в респонз пихнуть инфу про аниме

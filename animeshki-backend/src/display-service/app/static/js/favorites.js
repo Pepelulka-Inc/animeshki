@@ -36,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
       });
 
       card.addEventListener('click', () => {
-        window.location.href = '/anime'
+        const animeId = card.dataset.id;
+        window.location.href = `/anime?id=${animeId}`
       })
     });
   });

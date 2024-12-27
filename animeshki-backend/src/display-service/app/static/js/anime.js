@@ -2,45 +2,44 @@ document.addEventListener('DOMContentLoaded', function() {
     const starButtons = document.querySelectorAll('.star-btn');
     const favoriteBtn = document.querySelector('.favorite-btn');
   
-    let currentRating = 0; // Переменная для хранения текущего рейтинга
+    let currentRating = 0; 
   
     starButtons.forEach(button => {
       button.addEventListener('click', function() {
-        const rating = parseInt(this.dataset.rating, 10); // Получаем рейтинг из data-rating
-        currentRating = rating; // Сохраняем текущий рейтинг
+        const rating = parseInt(this.dataset.rating, 10); 
+        currentRating = rating; 
   
-        // Обновляем состояние звёздочек
+        
         updateStars(currentRating);
   
         alert(`Thank you for rating this anime ${rating} stars!`);
       });
   
-      // Hover эффект при наведении
       button.addEventListener('mouseenter', function() {
-        const rating = parseInt(this.dataset.rating, 10); // Получаем рейтинг из data-rating
-        updateStars(rating, true); // Обновляем звёзды для превью
+        const rating = parseInt(this.dataset.rating, 10); 
+        updateStars(rating, true); 
       });
   
       button.addEventListener('mouseleave', function() {
-        updateStars(currentRating); // Возвращаемся к текущему рейтингу
+        updateStars(currentRating);
       });
     });
   
-    // Функция для обновления состояния звёзд
+    
     function updateStars(rating, preview = false) {
       starButtons.forEach(btn => {
-        const btnRating = parseInt(btn.dataset.rating, 10); // Рейтинг кнопки
+        const btnRating = parseInt(btn.dataset.rating, 10);
         if (btnRating <= rating) {
           btn.classList.add('active');
-          btn.style.color = preview ? '#ffd700' : ''; // Если превью, меняем цвет
+          btn.style.color = preview ? '#ffd700' : ''; 
         } else {
           btn.classList.remove('active');
-          btn.style.color = ''; // Возвращаем дефолтный цвет
+          btn.style.color = ''; 
         }
       });
     }
   
-    // Обработка кнопки "Добавить в избранное"
+    
     favoriteBtn.addEventListener('click', function() {
       this.classList.toggle('active');
       const isFavorite = this.classList.contains('active');
@@ -54,4 +53,25 @@ document.addEventListener('DOMContentLoaded', function() {
         alert('Removed from favorites!');
       }
     });
+
+  const commentForm = document.querySelector('.comment-form');
+  const commentsContainer = document.querySelector('.comments');
+
+  commentForm.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const textarea = this.querySelector('textarea');
+    const comment = textarea.value.trim();
+
+    if(comment) {
+      const newComment = document.createElement('div');
+      newComment.className = 'comment';
+      newComment.innerHTML = `
+        <strong>You</strong>
+        <p>${comment}</p>
+      `;
+      commentsContainer.insertBefore(newComment, commentsContainer.firstChild);
+      textarea.value = '';
+    }
+  });
+
   });

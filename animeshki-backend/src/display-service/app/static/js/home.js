@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
         this.style.transform = 'translateY(0)';
       });
       card.addEventListener('click', () => {
-        window.location.href = '/anime'
+        const animeId = card.dataset.id;
+        window.location.href = `/anime?id=${animeId}`
       })
     });
   

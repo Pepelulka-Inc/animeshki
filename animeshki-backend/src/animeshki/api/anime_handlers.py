@@ -6,7 +6,6 @@ from aiohttp import web
 from pydantic import ValidationError
 from sqlalchemy.future import select
 
-from auth import SECRET_KEY
 from infrastructure.database.models import Anime, Comments, UserAnimeStarsCount
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel
@@ -168,11 +167,9 @@ async def set_comment_for_anime_by_id(request: web.Request) -> web.Response:
     anime_id = request.match_info["anime_id"]
     try:
         anime_id = uuid.UUID(anime_id)
-        token = request.cookies.get("access_token")
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        username = payload.get("username")
         data = await request.json()
         comment_text = data["text"]
+        username = data["username"]
 
         if not comment_text or not username:
             return web.json_response(
@@ -211,16 +208,13 @@ async def rate_anime(request: web.Request) -> web.Response:
     try:
         anime_id = uuid.UUID(anime_id)
         data = await request.json()
-        rating = data.get("rating")
+        username = data["username"]
+        rating = data["rating"]
 
         if rating is None or not (1 <= rating <= 10):
             return web.json_response(
                 {"error": "Rating must be an integer between 1 and 10."}, status=400
             )
-
-        token = request.cookies.get("access_token")
-        payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-        username = payload.get("username")
 
         _logger.info(
             f"Rating anime ID: {anime_id} by user: {username} with rating: {rating}"

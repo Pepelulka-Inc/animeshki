@@ -67,7 +67,7 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/recommend")
 def get_recommendations(
     input_params: RecommendInput = Depends(get_recommend_input)
-) -> Dict[str, List[int]]:
+) -> Dict[int, List[int]]:
     recommendations_df = models["recommender_system"].recommend(
         users=input_params.users,
         dataset=datasets["recommender_system"],

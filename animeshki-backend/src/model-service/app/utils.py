@@ -3,23 +3,27 @@ from fastapi import FastAPI, Query
 from pydantic import BaseModel, Field
 from typing import List, Optional
 from typing_extensions import Literal
-from rectools import Columns
 
 import pandas as pd
 
-import kagglehub
-
+from rectools import Columns
 from rectools.dataset import Dataset
 from rectools.models.lightfm import LightFMWrapperModel
 from lightfm import LightFM
 from pathlib import Path
 
+import kagglehub
+from kagglehub import KaggleDatasetAdapter
+
 def init_dataset_from_file(dataset_path: Path):
     return pd.read_csv(dataset_path)
 
 def init_dataset_from_kaggle(dataset_path: Path) -> pd.DataFrame:
-    path = kagglehub.dataset_download("hernan4444/anime-recommendation-database-2020")
-    ratings = pd.read_csv(path + '/rating_complete.csv')
+    ratings = kagglehub.load_dataset(
+        KaggleDatasetAdapter.PANDAS,
+        "hernan4444/anime-recommendation-database-2020",
+        "rating_complete.csv"
+    )
     ratings = ratings[ratings['rating']!=-1]
     ratings.columns = [Columns.User, Columns.Item,  Columns.Weight]
     ratings[Columns.Datetime] = ratings.groupby(Columns.User).cumcount()

@@ -5,14 +5,11 @@ services:
       dockerfile: Dockerfile
     container_name: model-service
     expose:
-      - "8000"
-    depends_on:
-      postgres:
-        condition: service_healthy
+      - 14880
     volumes:
-      - model-data:/bin:../../animeshki-backend/src/model-service/bin  # Точка монтирования для хранения данных
+      - model-data:/root/bin/      
     environment:
-      - DATABASE_URL
+      - PORT=14880
       - MODEL_TRAIN_NUM_THREADS
     networks:
       - backend-network

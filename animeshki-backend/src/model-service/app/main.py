@@ -77,8 +77,11 @@ def get_recommendations(
         add_rank_col=input_params.add_rank_col,
         on_unsupported_targets=input_params.on_unsupported_targets
     )
-    recos = recommendations_df.groupby(Columns.User)[Columns.Item].apply(list)
-    return recos.to_dict()
+    try:
+        recos = recommendations_df.groupby(Columns.User)[Columns.Item].apply(list)
+        return recos.to_dict()
+    except Exception as e:
+
 
 
 if __name__ == "__main__":

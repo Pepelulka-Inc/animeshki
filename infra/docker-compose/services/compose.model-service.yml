@@ -1,0 +1,19 @@
+services:
+  model-service:
+    build:
+      context: ../../animeshki-backend/src/model-service
+      dockerfile: Dockerfile
+    container_name: model-service
+    expose:
+      - "8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - model-data:/bin:../../animeshki-backend/src/model-service/bin  # Точка монтирования для хранения данных
+    environment:
+      - DATABASE_URL
+      - MODEL_TRAIN_NUM_THREADS
+    networks:
+      - backend-network
+    restart: always

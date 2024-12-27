@@ -1,0 +1,4 @@
+services:
+  model-service:
+    ports:
+      - "14880:8000"

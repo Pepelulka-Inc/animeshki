@@ -21,6 +21,36 @@ def res_not_found():
     return web.json_response({"msg": "Not found"}, status=404)
 
 
+async def get_anime_by_mal_id(request: web.Request) -> web.Response:
+    """
+    /GET anime/mal/{anime_id}
+
+    Получение аниме по айди
+    """
+    anime_id = request.match_info["anime_id"]
+    try:
+        async with Session() as session:
+            result = await session.execute(
+                select(Anime).where(Anime.mal_id == int(anime_id))
+            )
+            anime = result.scalar_one_or_none()
+            if anime is None:
+                return res_not_found()
+            pydantic_model = AnimeModel(
+                anime_id=str(anime.anime_id),
+                title=anime.title,
+                description=anime.description,
+                picture_minio_path=anime.picture_minio_path,
+                mal_id=anime.mal_id,
+            )
+
+            await session.commit()
+            return web.json_response(pydantic_model.model_dump())
+    except Exception as e:
+        _logger.warning(f"Can't give anime by id: {e}")
+        return res_error("Something went wrong")
+
+
 async def get_anime_by_id(request: web.Request) -> web.Response:
     """
     /GET anime/{anime_id}

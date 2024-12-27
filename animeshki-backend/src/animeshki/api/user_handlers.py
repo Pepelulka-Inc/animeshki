@@ -4,7 +4,6 @@ import jwt
 from aiohttp import web
 from sqlalchemy.future import select
 
-from auth import SECRET_KEY
 from infrastructure.database.models import Favorites
 from infrastructure.database.engine import Session
 
@@ -18,9 +17,7 @@ async def get_favorites(request: web.Request) -> web.Response:
 
     Получение избранных аниме пользователя
     """
-    token = request.cookies.get("access_token")
-    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
-    username = payload.get("username")
+    username = request.get("username")
     _logger.info(f"Fetching favorites for user: {username}")
     async with Session() as session:
         result = await session.execute(
@@ -40,8 +37,6 @@ async def add_favorite(request: web.Request) -> web.Response:
     Добавление аниме в избранное
     """
     data = await request.json()
-    token = request.cookies.get("access_token")
-    payload = jwt.decode(token, SECRET_KEY, algorithms=["HS256"])
     username = payload.get("username")
 
     anime_id = data["anime_id"]

@@ -6,7 +6,6 @@ from aiohttp import web
 from pydantic import ValidationError
 from sqlalchemy.future import select
 
-from auth import SECRET_KEY
 from infrastructure.database.models import Anime, Comments, UserAnimeStarsCount
 from infrastructure.database.engine import Session
 from domain.anime import AnimeModel, AnimeCreateModel

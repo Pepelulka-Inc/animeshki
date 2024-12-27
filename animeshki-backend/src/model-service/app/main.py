@@ -7,6 +7,7 @@ import uvicorn
 
 from pathlib import Path
 import pandas as pd 
+from rectools import Columns
 from rectools.dataset import Dataset
 from rectools.models.lightfm import LightFMWrapperModel
 from lightfm import LightFM
@@ -66,7 +67,7 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/recommend")
 def get_recommendations(
     input_params: RecommendInput = Depends(get_recommend_input)
-) -> List[Dict]:
+) -> Dict[str, List[int]]:
     recommendations_df = models["recommender_system"].recommend(
         users=input_params.users,
         dataset=datasets["recommender_system"],
@@ -76,10 +77,8 @@ def get_recommendations(
         add_rank_col=input_params.add_rank_col,
         on_unsupported_targets=input_params.on_unsupported_targets
     )
-    # Convert DataFrame to dict for JSON serialization
-    recommendations = recommendations_df.to_dict(orient='records')
-
-    return recommendations
+    recos = recommendations_df.groupby(Columns.User)[Columns.Item].apply(list)
+    return recos.to_dict()
 
 
 if __name__ == "__main__":

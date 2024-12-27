@@ -64,7 +64,7 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
         async with Session() as session:
             result = await session.execute(select(Anime).where(Anime.anime_id.in_(ids)))
             animes = result.scalars().all()
-            result = {}
+            result = []
             for anime in animes:
                 pydantic_model = AnimeModel(
                     anime_id=str(anime.anime_id),
@@ -73,7 +73,7 @@ async def post_animes_by_ids(request: web.Request) -> web.Response:
                     picture_minio_path=anime.picture_minio_path,
                     mal_id=anime.mal_id,
                 )
-                result[str(anime.anime_id)] = pydantic_model.model_dump()
+                result.append(pydantic_model.model_dump())
 
             await session.commit()
             return web.json_response(result)

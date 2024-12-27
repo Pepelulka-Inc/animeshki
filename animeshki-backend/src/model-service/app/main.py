@@ -81,7 +81,7 @@ def get_recommendations(
         recos = recommendations_df.groupby(Columns.User)[Columns.Item].apply(list)
         return recos.to_dict()
     except Exception as e:
-
+        pass
 
 
 if __name__ == "__main__":

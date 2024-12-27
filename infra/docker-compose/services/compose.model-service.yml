@@ -5,9 +5,9 @@ services:
       dockerfile: Dockerfile
     container_name: model-service
     expose:
-      - MODEL_PORT
+      - "8000"
     volumes:
-      - model-data:/root/bin/      
+      - ../../animeshki-backend/src/model-service/bin:/root/bin
     environment:
       - MODEL_PORT
       - MODEL_TRAIN_NUM_THREADS

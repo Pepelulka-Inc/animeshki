@@ -1,0 +1,15 @@
+services:
+  display-service:
+    build:
+      context: ../../animeshki-backend/src/display-service
+      dockerfile: Dockerfile
+    container_name: display-service
+    environment:
+      - SECRET_KEY
+    expose:
+      - "8000"
+    depends_on:
+      - auth-service
+    networks:
+      - backend-network
+    restart: always

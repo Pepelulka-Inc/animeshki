@@ -1,0 +1,67 @@
+<html><head><base href=""/>
+    <!DOCTYPE html>
+    <meta charset="UTF-8">
+    <title>Animeshki - Search Anime</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/search.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+    
+    <nav class="navbar">
+      <a class="logo">Animeshki</a>
+      <div class="nav-buttons">
+        <a href="http://localhost/" class="home-btn">
+          <i class="fas fa-home"></i>
+          Home
+        </a>
+        <a href="http://localhost/favorites" class="favorites-btn">
+          <i class="fas fa-star"></i>
+          Favorites
+        </a>
+      </div>
+    </nav>
+    
+    <main class="search-section">
+      <div class="search-container">
+        <input type="text" class="search-input" placeholder="Search for anime..." autofocus>
+      </div>
+    
+      <div class="anime-grid">
+        <div class="anime-card" data-id="12345">
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #ff9a9e, #fad0c4)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">Attack on Titan</h3>
+            <div class="anime-rating">★★★★★</div>
+          </div>
+        </div>
+    
+        <div class="anime-card" data-id="12345">
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #a18cd1, #fbc2eb)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">Demon Slayer</h3>
+            <div class="anime-rating">★★★★★</div>
+          </div>
+        </div>
+    
+        <div class="anime-card" data-id="12345">
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #84fab0, #8fd3f4)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">My Hero Academia</h3>
+            <div class="anime-rating">★★★★☆</div>
+          </div>
+        </div>
+    
+        <div class="anime-card" data-id="12345">
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #ff9a9e, #fecfef)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">Jujutsu Kaisen</h3>
+            <div class="anime-rating">★★★★★</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    
+    <script src="/static/js/search.js"> </script>
+    
+    </body></html>

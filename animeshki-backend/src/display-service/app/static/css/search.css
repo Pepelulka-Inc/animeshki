@@ -1,0 +1,132 @@
+:root {
+    --primary: #6c5ce7;
+    --secondary: #a55eea;
+    --background: #1a1a2e;
+    --text: #fff;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+  }
+
+  body {
+    background: var(--background);
+    color: var(--text);
+    padding-top: 80px;
+  }
+
+  .navbar {
+    padding: 1rem 2rem;
+    background: rgba(0,0,0,0.3);
+    backdrop-filter: blur(10px);
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-decoration: none;
+  }
+
+  .nav-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .home-btn, .favorites-btn {
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: transform 0.3s;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .home-btn:hover, .favorites-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+  }
+
+  .favorites-btn i {
+    color: #ffd700;
+  }
+
+  .search-section {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .search-container {
+    margin-bottom: 2rem;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 1rem;
+    border-radius: 25px;
+    border: 2px solid var(--primary);
+    background: rgba(255,255,255,0.1);
+    color: white;
+    font-size: 1.1rem;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--secondary);
+  }
+
+  .anime-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+
+  .anime-card {
+    background: rgba(255,255,255,0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+
+  .anime-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .anime-cover {
+    width: 100%;
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .anime-info {
+    padding: 1rem;
+  }
+
+  .anime-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .anime-rating {
+    color: #ffd700;
+    margin-top: 0.5rem;
+  }

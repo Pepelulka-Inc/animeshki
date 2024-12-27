@@ -1,0 +1,68 @@
+<html><head><base href=""/>
+    <!DOCTYPE html>
+    <meta charset="UTF-8">
+    <title>Animeshki - Favorites</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/favorites.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    </head>
+    <body>
+    
+    <nav class="navbar">
+      <a class="logo">Animeshki</a>
+      <div class="nav-buttons">
+        <a href="http://localhost/" class="home-btn">
+          <i class="fas fa-home"></i>
+          Home
+        </a>
+      </div>
+    </nav>
+    
+    <main class="favorites-section">
+      <h1 class="favorites-title">My Favorite Anime</h1>
+      
+      <div class="favorites-grid">
+        <div class="anime-card" data-id="12345">
+          <button class="delete-btn">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #ff9a9e, #fad0c4)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">Attack on Titan</h3>
+            <div class="anime-rating">★★★★★</div>
+          </div>
+        </div>
+    
+        <div class="anime-card" data-id="12345">
+          <button class="delete-btn">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #a18cd1, #fbc2eb)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">Demon Slayer</h3>
+            <div class="anime-rating">★★★★★</div>
+          </div>
+        </div>
+    
+        <div class="anime-card" data-id="12345">
+          <button class="delete-btn">
+            <i class="fas fa-times"></i>
+          </button>
+          <div class="anime-cover" style="background-image: linear-gradient(45deg, #84fab0, #8fd3f4)"></div>
+          <div class="anime-info">
+            <h3 class="anime-title">My Hero Academia</h3>
+            <div class="anime-rating">★★★★☆</div>
+          </div>
+        </div>
+
+       </div>
+    
+      <div class="empty-favorites">
+        <i class="fas fa-heart-broken"></i>
+        <p>No favorite anime yet. Start adding some!</p>
+      </div>
+    </main>
+    
+    <script src="/static/js/favorites.js"> </script>
+    
+    </body></html>

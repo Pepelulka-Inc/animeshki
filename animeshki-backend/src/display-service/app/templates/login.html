@@ -1,0 +1,36 @@
+<html>
+<head><base href=""/>
+<!DOCTYPE html>
+<meta charset="UTF-8">
+<title>Login Form</title>
+<link rel="stylesheet" type="text/css" href="/static/css/login.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<form class="login-form">
+  <h2>Login to Animeshki</h2>
+  
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input type="text" id="username" name="username" required>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input type="password" id="password" name="password" required>
+  </div>
+  
+  <button type="submit" class="submit-btn">Login</button>
+
+  <div id="error-message" class="error-message">Invalid username or password</div>
+  
+  <div class="login-links">
+    <a href="http://localhost/register">Don't have an account? Register here</a> <!-- change URL-->
+  </div>
+</form>
+
+<script src="/static/js/login.js"> </script>
+
+</body>
+</html>

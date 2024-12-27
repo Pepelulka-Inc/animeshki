@@ -1,0 +1,7 @@
+uvicorn
+fastapi
+jinja2
+python-dotenv
+pyjwt
+bcrypt
+httpx

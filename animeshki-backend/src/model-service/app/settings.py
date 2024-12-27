@@ -5,7 +5,7 @@ from typing import Dict, List
 logging.basicConfig(level=logging.INFO)
 logger: logging.Logger = logging.getLogger("model-service.settings")
 
-DATA_PREFIX = 'bin'
+DATA_PREFIX = './bin'
 USE_MINIO: bool = True if os.getenv("USE_MINIO", False) == "True" else False
 DEBUG: bool = True if os.getenv("DEBUG", False) == "True" else False
 # Настройки сервиса

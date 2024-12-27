@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Uuid, ForeignKey
+from sqlalchemy import Column, Integer, String, Uuid, ForeignKey, Sequence
 from sqlalchemy.orm import DeclarativeBase
 
 __all__ = [
@@ -22,7 +22,7 @@ class User(Base):
     username = Column(String(32), unique=True, index=True, primary_key=True)
     hashed_password = Column(String(128))
     role = Column(String(16))
-
+    user_id = Column(Integer, Sequence('user_id_seq'), index=True, unique=True, nullable=False)
 
 class Favorites(Base):
     __tablename__ = "favorites"

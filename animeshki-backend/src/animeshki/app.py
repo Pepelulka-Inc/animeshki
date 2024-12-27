@@ -9,7 +9,7 @@ from api.anime_handlers import (
     rate_anime,
     get_anime_rates,
 )
-from api.user_handlers import get_favorites, add_favorite
+from api.user_handlers import get_favorites, add_favorite, get_user_id_by_username
 from infrastructure.database.engine import init_db_and_tables
 
 
@@ -20,6 +20,7 @@ async def on_startup(app):
 app = web.Application()
 app.router.add_post("/{username}/favorites/get", get_favorites)
 app.router.add_post("/{username}/favorites/add", add_favorite)
+app.router.add_get("/get_user_id/{username}", get_user_id_by_username)
 
 app.router.add_get("/anime/get/{anime_id}", get_anime_by_id)
 app.router.add_post("/anime/get/many", post_animes_by_ids)

@@ -1,15 +1,32 @@
 import logging
 
-import jwt
 from aiohttp import web
 from sqlalchemy.future import select
 
-from infrastructure.database.models import Favorites
+from infrastructure.database.models import Favorites, User
 from infrastructure.database.engine import Session
 
 
 _logger = logging.getLogger(__name__)
 
+
+async def get_user_id_by_username(request: web.Request) -> web.Response:
+    """
+    /GET /get_user_id/{username}
+
+    Получение user_id по username
+    """
+    username = request.match_info["username"]
+    _logger.info(f"Fetching favorites for user: {username}")
+    async with Session() as session:
+        result = await session.execute(
+            select(User).where(User.username == username)
+        )
+        record = result.scalars().first()
+
+        if record is None:
+            return web.json_response({"user_id": None})
+        return web.json_response({"user_id": int(record.user_id)})
 
 async def get_favorites(request: web.Request) -> web.Response:
     """
@@ -17,7 +34,7 @@ async def get_favorites(request: web.Request) -> web.Response:
 
     Получение избранных аниме пользователя
     """
-    username = request.get("username")
+    username = request.match_info["username"]
     _logger.info(f"Fetching favorites for user: {username}")
     async with Session() as session:
         result = await session.execute(
@@ -37,7 +54,7 @@ async def add_favorite(request: web.Request) -> web.Response:
     Добавление аниме в избранное
     """
     data = await request.json()
-    username = payload.get("username")
+    username = request.match_info["username"]
 
     anime_id = data["anime_id"]
 
@@ -51,7 +68,7 @@ async def add_favorite(request: web.Request) -> web.Response:
     async with Session() as session:
         existing_favorite = await session.execute(
             select(Favorites).where(
-                Favorites.username == username, Favorites.anime_id == anime_id
+                User.username == username, User.anime_id == anime_id
             )
         )
 

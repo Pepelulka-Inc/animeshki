@@ -26,15 +26,17 @@
       <div class="search-container">
         <input type="text" class="search-input" placeholder="Search for anime..." autofocus>
       </div>
-    
+      
       <div class="anime-grid">
-        <div class="anime-card" data-id="12345">
+
+        {% for anime in anime_list %}
+        <div class="anime-card" data-id= {{ anime_list[anime] }}>
           <div class="anime-cover" style="background-image: linear-gradient(45deg, #ff9a9e, #fad0c4)"></div>
           <div class="anime-info">
             <h3 class="anime-title">Attack on Titan</h3>
-            <div class="anime-rating">★★★★★</div>
           </div>
         </div>
+        {% endfor %}
     
         <div class="anime-card" data-id="12345">
           <div class="anime-cover" style="background-image: linear-gradient(45deg, #a18cd1, #fbc2eb)"></div>
@@ -61,7 +63,11 @@
         </div>
       </div>
     </main>
-    
+
+
+     <script>
+        const anime_list = {{ anime_list|tojson }};
+    </script>
     <script src="/static/js/search.js"> </script>
     
     </body></html>

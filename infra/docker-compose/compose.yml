@@ -3,6 +3,12 @@ networks:
     name: backend-network
 
 volumes:
+  model-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: ../../animeshki-backend/src/model-service/bin/
   minio-data:
     driver: local
     name: minio-data
